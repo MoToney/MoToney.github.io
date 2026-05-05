@@ -6,6 +6,7 @@ import Layout from "./layout/Layout.jsx";
 import Projects from "./pages/Projects.jsx";
 import About from "./pages/About.jsx";
 import {useEffect} from "react";
+import Report from "./pages/Report.jsx";
 
 function App() {
     useEffect(() => {
@@ -22,6 +23,7 @@ function App() {
                         <Home/>
                         <About/>
                         <Projects />
+                        < Report />
                     </Layout>
                 }/>
             </Routes>
