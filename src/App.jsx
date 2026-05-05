@@ -5,8 +5,15 @@ import './styles/App.css'
 import Layout from "./layout/Layout.jsx";
 import Projects from "./pages/Projects.jsx";
 import About from "./pages/About.jsx";
+import {useEffect} from "react";
 
 function App() {
+    useEffect(() => {
+        fetch("/api/hello")
+            .then(res => res.json())
+            .then(data => console.log(data));
+    }, []);
+
     return (
         <BrowserRouter>
 
