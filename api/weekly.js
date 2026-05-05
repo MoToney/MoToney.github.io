@@ -1,17 +1,17 @@
-import { Buffer } from 'buffer';
 
+
+import { kv } from "@vercel/kv";
 
 export default async function handler(req, res) {
-    const url = "https://api.track.toggl.com/reports/api/v2/weekly?workspace_id=8246498";
+    try {
+        const data = await kv.get("toggl:weekly");
 
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Basic ${Buffer
-                .from(process.env.TOGGL_API_KEY + ":api_token")
-                .toString("base64")}`
+        if (!data) {
+            return res.status(404).json({ message: "No data yet" });
         }
-    });
 
-    const data = await response.json();
-    res.status(200).json(data);
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(500).send("Error fetching data");
+    }
 }
