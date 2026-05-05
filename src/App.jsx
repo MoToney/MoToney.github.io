@@ -17,7 +17,6 @@ function App() {
     return (
         <BrowserRouter>
 
-
             <Routes>
                 <Route path="/" element={
                     <Layout>
@@ -26,10 +25,7 @@ function App() {
                         <Projects />
                     </Layout>
                 }/>
-
-
             </Routes>
-
         </BrowserRouter>
     )
 }
