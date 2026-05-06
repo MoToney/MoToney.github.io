@@ -7,7 +7,7 @@ import Projects from "./pages/Projects.jsx";
 import About from "./pages/About.jsx";
 import {useEffect} from "react";
 import Report from "./pages/Report.jsx";
-import WeeklyStats from "./pages/WeeklyStats.js";
+import WeeklyStats from "./pages/WeeklyStats.jsx";
 
 function App() {
     useEffect(() => {
