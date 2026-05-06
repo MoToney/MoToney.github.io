@@ -4,7 +4,7 @@ export default function WeeklyStats() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch("/api/get-weekly")
+        fetch("/api/weekly")
             .then((res) => res.json())
             .then(setData)
             .catch(console.error);
