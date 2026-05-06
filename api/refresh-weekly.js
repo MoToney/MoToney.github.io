@@ -1,6 +1,8 @@
 // /api/refresh-weekly.js
 
-import { kv } from "@vercel/kv";
+import { neon } from "@neondatabase/serverless";
+
+const sql = neon(process.env.DATABASE_URL);
 
 export default async function handler(req, res) {
     try {
@@ -17,7 +19,6 @@ export default async function handler(req, res) {
 
         const entries = await response.json();
 
-        // ---- Example: aggregate weekly hours ----
         const totalSeconds = entries.reduce((sum, e) => {
             if (!e.duration || e.duration < 0) return sum;
             return sum + e.duration;
@@ -25,18 +26,20 @@ export default async function handler(req, res) {
 
         const totalHours = (totalSeconds / 3600).toFixed(2);
 
-        const payload = {
-            totalHours,
-            entryCount: entries.length,
-            lastUpdated: new Date().toISOString(),
-        };
+        // store in DB
+        await sql`
+      INSERT INTO weekly_stats (id, total_hours, entry_count, updated_at)
+      VALUES (1, ${totalHours}, ${entries.length}, NOW())
+      ON CONFLICT (id)
+      DO UPDATE SET
+        total_hours = EXCLUDED.total_hours,
+        entry_count = EXCLUDED.entry_count,
+        updated_at = NOW();
+    `;
 
-        // ---- Store in KV ----
-        await kv.set("toggl:weekly", payload);
-
-        res.status(200).json(payload);
+        res.status(200).json({ totalHours });
     } catch (err) {
         console.error(err);
-        res.status(500).send("Failed to refresh");
+        res.status(500).send("Error");
     }
 }

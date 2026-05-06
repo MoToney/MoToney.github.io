@@ -1,17 +1,10 @@
+// /api/get-weekly.js
 
+import { neon } from "@neondatabase/serverless";
 
-import { kv } from "@vercel/kv";
+const sql = neon(process.env.DATABASE_URL);
 
 export default async function handler(req, res) {
-    try {
-        const data = await kv.get("toggl:weekly");
-
-        if (!data) {
-            return res.status(404).json({ message: "No data yet" });
-        }
-
-        res.status(200).json(data);
-    } catch ( err ) {
-        res.status(500).send("Error fetching data");
-    }
+    const result = await sql`SELECT * FROM weekly_stats WHERE id = 1`;
+    res.status(200).json(result[0]);
 }
